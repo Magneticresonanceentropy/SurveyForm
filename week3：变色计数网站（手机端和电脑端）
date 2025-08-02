@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计数与背景变化应用</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind自定义颜色 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6',
+                        secondary: '#EC4899',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-glass {
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+            .btn-effect {
+                transition: all 0.3s ease;
+            }
+            .btn-effect:hover {
+                transform: translateY(-2px);
+            }
+            .btn-effect:active {
+                transform: translateY(1px);
+            }
+        }
+    </style>
+    <style>
+        @media (max-width: 600px) {
+            .card {
+                width: 90%;
+                padding: 1rem;
+            }
+            .button {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen transition-all duration-1000 ease-in-out" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+    <!-- 主卡片容器 -->
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <!-- 半透明圆角卡片 -->
+        <div class="card-glass rounded-3xl shadow-xl p-8 w-full max-w-md border border-white/20">
+            <!-- 标题 -->
+            <h1 class="text-2xl font-bold text-center text-gray-800 mb-8">
+                <i class="fa fa-magic text-primary mr-2"></i>计数与背景变换
+            </h1>
+            
+            <!-- 计数显示区域 -->
+            <div class="text-center mb-10 p-6 bg-white/30 rounded-2xl">
+                <p class="text-5xl font-bold text-gray-800" id="counter">0</p>
+            </div>
+            
+            <!-- 按钮区域 -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- 计数按钮 (使用div而非button标签) -->
+                <div id="count-btn" class="btn-effect bg-primary text-white rounded-xl py-4 px-6 text-lg font-semibold flex items-center justify-center cursor-pointer">
+                    <i class="fa fa-plus-circle mr-2"></i>计数+1
+                </div>
+                
+                <!-- 背景变化按钮 (使用div而非button标签) -->
+                <div id="bg-btn" class="btn-effect bg-secondary text-white rounded-xl py-4 px-6 text-lg font-semibold flex items-center justify-center cursor-pointer">
+                    <i class="fa fa-paint-brush mr-2"></i>变换背景
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const counterElement = document.getElementById('counter');
+        const countBtn = document.getElementById('count-btn');
+        const bgBtn = document.getElementById('bg-btn');
+        const bodyElement = document.body;
+        
+        // 初始化计数器
+        let count = 0;
+        
+        // 生成随机颜色的辅助函数
+        function getRandomColor() {
+            // 生成0-255之间的随机数
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            // 返回rgba格式的颜色
+            return `rgba(${r}, ${g}, ${b}, 0.8)`;
+        }
+        
+        // 计数按钮点击事件
+        countBtn.addEventListener('click', () => {
+            // 增加计数
+            count++;
+            // 更新显示
+            counterElement.textContent = count;
+            
+            // 添加数字变化动画
+            counterElement.classList.add('scale-110', 'text-primary');
+            setTimeout(() => {
+                counterElement.classList.remove('scale-110', 'text-primary');
+            }, 300);
+        });
+        
+        // 背景变换按钮点击事件
+        bgBtn.addEventListener('click', () => {
+            // 生成两个随机颜色
+            const color1 = getRandomColor();
+            const color2 = getRandomColor();
+            
+            // 随机选择渐变角度 (0-360度)
+            const angle = Math.floor(Math.random() * 360);
+            
+            // 应用渐变背景
+            bodyElement.style.background = `linear-gradient(${angle}deg, ${color1}, ${color2})`;
+            
+            // 添加按钮点击反馈
+            bgBtn.classList.add('scale-95');
+            setTimeout(() => {
+                bgBtn.classList.remove('scale-95');
+            }, 200);
+        });
+    </script>
+</body>
+</html>
